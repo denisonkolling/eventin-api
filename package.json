@@ -1,0 +1,19 @@
+{
+  "name": "event-in-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch --env-file .env src/server.ts"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.5",
+    "tsx": "^4.7.2",
+    "typescript": "^5.4.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.12.1",
+    "fastify": "^4.26.2",
+    "zod": "^3.22.4"
+  }
+}
