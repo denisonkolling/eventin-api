@@ -1,5 +1,5 @@
 import fastify from 'fastify';
-import {	serializerCompiler,	validatorCompiler,	ZodTypeProvider,} from 'fastify-type-provider-zod';
+import { serializerCompiler, validatorCompiler, ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { PrismaClient } from '@prisma/client';
 import { generateSlug } from './utils/generate-slug';
@@ -26,8 +26,17 @@ app.withTypeProvider<ZodTypeProvider>().post(
 				details: z.string().nullable(),
 				maximumAttendees: z.number().int().positive().nullable(),
 			}),
+			response: {
+				201: z.object({
+					eventId: z.string(),
+				}),
+				409: z.object({
+					error: z.string(),
+				}),
+			},
 		},
 	},
+
 	async (request, reply) => {
 		const { title, details, maximumAttendees } = request.body;
 
