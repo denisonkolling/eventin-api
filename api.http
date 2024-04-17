@@ -1,0 +1,18 @@
+POST http://localhost:3333/events
+Content-Type: application/json
+
+{
+  "title": "United Summit",
+  "details": "Um evento para quem é apaixonado por programação",
+  "maximumAttendees": 100
+}
+
+###
+
+POST http://localhost:3333/events/7b0986d6-4b43-4b2f-a82e-9b2f166494aa/attendees
+Content-Type: application/json
+
+{
+  "name": "Denison",
+  "email": "deni@email.com"
+}

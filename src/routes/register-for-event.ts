@@ -4,7 +4,6 @@ import { prisma } from '../lib/prisma';
 import { FastifyInstance } from 'fastify';
 
 export async function registerForEvent(app: FastifyInstance) {
-
 	app.withTypeProvider<ZodTypeProvider>().post(
 		'/events/:eventId/attendees',
 		{
@@ -20,6 +19,9 @@ export async function registerForEvent(app: FastifyInstance) {
 					201: z.object({
 						attendeeId: z.number(),
 					}),
+					409: z.object({
+						message: z.string(),
+					}),
 				},
 			},
 		},
@@ -27,6 +29,41 @@ export async function registerForEvent(app: FastifyInstance) {
 		async (request, reply) => {
 			const { eventId } = request.params;
 			const { name, email } = request.body;
+		
+			const event = await prisma.event.findUnique({
+				where: {
+					id: eventId,
+				},
+			});
+
+			const amountOfAttendees = await prisma.attendee.count({
+				where: {
+					eventId,
+				},
+			});
+
+			if (event?.maximumAttendees && amountOfAttendees >= event.maximumAttendees) {
+				reply.status(409).send({
+					message: 'Event is full',
+				});
+				return;
+			}
+
+			const attendeeFromEmail = await prisma.attendee.findUnique({
+				where: {
+					eventId_email: {
+						eventId,
+						email,
+					},
+				},
+			});
+
+			if (attendeeFromEmail) {
+				reply.status(409).send({
+					message: 'Attendee with this email already registered for this event',
+				});
+				return;
+			}
 
 			const attendee = await prisma.attendee.create({
 				data: {
