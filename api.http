@@ -1,3 +1,4 @@
+
 POST http://localhost:3333/events
 Content-Type: application/json
 
@@ -9,10 +10,10 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3333/events/7b0986d6-4b43-4b2f-a82e-9b2f166494aa/attendees
+POST http://localhost:3333/events/da569e5e-be8e-4600-a7d4-17db63cc07b8/attendees
 Content-Type: application/json
 
 {
   "name": "Denison",
-  "email": "deni@email.com"
+  "email": "denis2@email.com"
 }
