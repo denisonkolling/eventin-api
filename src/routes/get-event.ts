@@ -2,6 +2,7 @@ import { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { FastifyInstance } from 'fastify';
+import { generateSlug } from '../utils/generate-slug';
 
 export async function getEvent(app: FastifyInstance) {
 	app.withTypeProvider<ZodTypeProvider>().get(
@@ -15,8 +16,10 @@ export async function getEvent(app: FastifyInstance) {
 					200: z.object({
 						id: z.string().uuid(),
 						title: z.string(),
+						slug: z.string(),
+						details: z.string().nullable().optional(),	
 						maximumAttendees: z.number().int().nullable().optional(),
-            attendeesRegistred: z.number().int().nullable().optional(),
+						attendeesRegistred: z.number().int().nullable().optional(),
 					}),
 					404: z.object({
 						message: z.string(),
@@ -30,7 +33,9 @@ export async function getEvent(app: FastifyInstance) {
 			const event = await prisma.event.findUnique({
 				select: {
 					id: true,
-          title: true,
+					title: true,
+					slug: true,
+					details: true,
 					maximumAttendees: true,
 					_count: {
 						select: {
@@ -53,8 +58,10 @@ export async function getEvent(app: FastifyInstance) {
 			reply.send({
 				id: event.id,
 				title: event.title,
+				slug: event.slug,
+				details: event.details,
 				maximumAttendees: event.maximumAttendees,
-        attendeesRegistred: event._count.attendees,
+				attendeesRegistred: event._count.attendees,
 			});
 		}
 	);
