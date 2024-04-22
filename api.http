@@ -30,6 +30,6 @@ GET http://localhost:3333/attendees/10/badge
 GET http://localhost:3333/attendees/10/check-in
 
 ###
-GET http://localhost:3333/events/da569e5e-be8e-4600-a7d4-17db63cc07b8/attendees?query=John
+GET http://localhost:3333/events/9e9bd979-9d10-4915-b339-3786b1634f33/attendees?query=Lorena
 
 // Query: ?query=John
