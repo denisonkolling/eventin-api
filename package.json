@@ -5,8 +5,12 @@
   "scripts": {
     "dev": "tsx watch --env-file .env src/server.ts"
   },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "license": "MIT",
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@types/node": "^20.12.5",
     "prisma": "^5.12.1",
     "tsx": "^4.7.2",
@@ -14,7 +18,9 @@
   },
   "dependencies": {
     "@prisma/client": "^5.12.1",
+    "dayjs": "^1.11.10",
     "fastify": "^4.26.2",
+    "fastify-type-provider-zod": "^1.1.9",
     "zod": "^3.22.4"
   }
 }
