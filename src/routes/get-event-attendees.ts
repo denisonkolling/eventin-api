@@ -9,7 +9,7 @@ export async function getEventAttendees(app: FastifyInstance) {
 		{
 			schema: {
 				summary: 'Get event attendees',
-        tags: ['events'],
+				tags: ['events'],
 				params: z.object({
 					eventId: z.string().uuid(),
 				}),
@@ -21,6 +21,7 @@ export async function getEventAttendees(app: FastifyInstance) {
 					200: z.object({
 						id: z.string().uuid(),
 						title: z.string(),
+						total: z.number(),
 						attendees: z.array(
 							z.object({
 								id: z.number(),
@@ -61,6 +62,19 @@ export async function getEventAttendees(app: FastifyInstance) {
 				},
 			});
 
+			const total = await prisma.attendee.count({
+				where: query
+					? {
+							eventId,
+							name: {
+								contains: query,
+							},
+					  }
+					: {
+							eventId,
+					  },
+			});
+
 			const event = await prisma.event.findUnique({
 				select: {
 					id: true,
@@ -88,6 +102,7 @@ export async function getEventAttendees(app: FastifyInstance) {
 					createdAt: attendee.createdAt,
 					checkIn: attendee.checkIn?.createdAt ?? null,
 				})),
+				total,
 			});
 		}
 	);
